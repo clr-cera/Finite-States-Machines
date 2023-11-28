@@ -69,22 +69,19 @@ begin
             case state is
 
                 when no_money =>
-                    state_out <= '0';
-                    pepsi_cola <= '0';
-                    exchange <= '0';
-
                     if (coin /= "000") then
                         state <= money;
-                        state_out <= '1';
                         current <= current_money + value(coin);
                         current_money <= current_money + value(coin);
-
+                        state_out <= '1';
+                    
+                    else
+                        pepsi_cola <= '0';
+                        exchange <= '0';
                     end if;
 
                 when money =>
-                    current <= current_money + value(coin);
-                    current_money <= current_money + value(coin);
-                    state_out <= '1';
+
                     
                     if (current_money + value(coin) = 20 and req = '1') then
                         state <= no_money;
@@ -92,15 +89,26 @@ begin
                         pepsi_cola <= '1';
                         current <= "00000";
                         current_money <= "00000";
-                    end if;
-                    
-                    
-                    if (current_money + value(coin) > 20) then
+
+
+                    elsif (current_money + value(coin) < 20 and req = '1') then
                         state <= no_money;
                         state_out <= '0';
                         exchange <= '1';
                         current <= "00000";
                         current_money <= "00000";
+
+                    
+                    elsif (current_money + value(coin) > 20) then
+                        state <= no_money;
+                        state_out <= '0';
+                        exchange <= '1';
+                        current <= "00000";
+                        current_money <= "00000";
+                    
+                    else 
+                        current <= current_money + value(coin);
+                        current_money <= current_money + value(coin);
                     end if;
             end case;
         end if;
