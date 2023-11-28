@@ -40,7 +40,9 @@ begin
         if (reset = '1') then
             state <= not_moving;
             current_floor <= "0000";
+            current <= "0000";
             objective_floor <= "0000";
+            movement <= "00";
 
         elsif (fixed_clock'event) and (fixed_clock = '1') then
             case state is
